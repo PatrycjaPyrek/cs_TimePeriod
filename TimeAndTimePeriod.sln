@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Time", "Time\Time.csproj", "{B86DD1FB-1C57-4DA9-9FC5-11CAF54AE0E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTest", "TimeTest\TimeTest.csproj", "{445CDEBF-32F9-404A-BE94-1DF36ADB55D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimePeriodTime", "TimePeriodTime\TimePeriodTime.csproj", "{B5FA7FF9-47AC-4A88-8882-3B039D3C40F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B86DD1FB-1C57-4DA9-9FC5-11CAF54AE0E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B86DD1FB-1C57-4DA9-9FC5-11CAF54AE0E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B86DD1FB-1C57-4DA9-9FC5-11CAF54AE0E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B86DD1FB-1C57-4DA9-9FC5-11CAF54AE0E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{445CDEBF-32F9-404A-BE94-1DF36ADB55D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{445CDEBF-32F9-404A-BE94-1DF36ADB55D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{445CDEBF-32F9-404A-BE94-1DF36ADB55D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{445CDEBF-32F9-404A-BE94-1DF36ADB55D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5FA7FF9-47AC-4A88-8882-3B039D3C40F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5FA7FF9-47AC-4A88-8882-3B039D3C40F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5FA7FF9-47AC-4A88-8882-3B039D3C40F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5FA7FF9-47AC-4A88-8882-3B039D3C40F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {28A2F8C2-D317-404E-B9AB-E46191F0DF39}
+	EndGlobalSection
+EndGlobal
