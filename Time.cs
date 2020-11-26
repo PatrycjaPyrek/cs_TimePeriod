@@ -160,8 +160,29 @@ namespace TimePeriodTime
 
         }
 
+        public static TimePeriod operator -(Time p1, Time p2)
+        {
+            var c3 = p1.Seconds - p2.Seconds;
+            var b3 = p1.Minutes - p2.Minutes;
+            var a3 = p1.Hours - p2.Hours;
+            Console.WriteLine(a3);
+            Console.WriteLine(b3);
+            Console.WriteLine(c3);
+            TimePeriod t = new TimePeriod(a3, b3, c3);
+            return t;
 
 
+
+        }
+        public static Time Minus(Time t, TimePeriod t2)
+        {
+            long Seconds = t.Seconds - t2.Seconds;
+            long Minutes = t.Minutes - t2.Minutes;
+            long Hours = t.Hours - t2.Hours;
+
+            Time t3 = new Time((byte)Hours, (byte)Minutes, (byte)Seconds);
+            return t3;
+        }
 
     }
     public struct TimePeriod :IEquatable<TimePeriod>,IComparable<TimePeriod>
@@ -176,10 +197,10 @@ namespace TimePeriodTime
         public long Seconds => second;
         public TimePeriod(long hour, long minute, long second)
         {
-            if (hour < 0 || minute < 0 || second < 0)
+            /*if (hour < 0 || minute < 0 || second < 0)
             {
                 throw new ArgumentOutOfRangeException();
-            }
+            }*/
             if (second > 59)
             {
                 
@@ -210,9 +231,18 @@ namespace TimePeriodTime
             byte a = Convert.ToByte(tabelka[0]);
             byte b = Convert.ToByte(tabelka[1]);
             byte c = Convert.ToByte(tabelka[2]);
-            if (a < 0 || b < 0 || c < 0)
+            if (a < 0 )
             {
-                throw new ArgumentOutOfRangeException();
+                a = 0;
+            }
+            if (b < 0)
+            {
+                b = 0;
+            }
+
+            if (c < 0)
+            {
+                c = 0;
             }
             this.hour = a*3600;
             this.minute = b*60;
@@ -311,6 +341,17 @@ namespace TimePeriodTime
             TimePeriod t3 = new TimePeriod(Hours, Minutes, Seconds);
             return t3;
         }
+        public static TimePeriod Minus(Time t, Time t2)
+        {
+            
+            long Seconds = t.Seconds - t2.Seconds;
+            long Minutes = t.Minutes - t2.Minutes;
+            long Hours = t.Hours - t2.Hours;
+
+            TimePeriod t3 = new TimePeriod(Hours, Minutes, Seconds);
+            return t3;
+        }
+   
 
 
     }
