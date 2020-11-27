@@ -21,6 +21,7 @@ namespace TimePeriodTime
           
             if (hour >= 24 || minute >= 60 || second >= 60)
             {
+                
                 throw new ArgumentOutOfRangeException();
             }
             this.hour = hour;
@@ -90,15 +91,28 @@ namespace TimePeriodTime
         }
         public int CompareTo(Time other)
         {
+            if (this.Hours == other.Hours)
+            {
+                if (this.Minutes == other.Minutes)
+                {
+                    if (this.Seconds == other.Seconds)
+                    {
+                        return 0;
+                    }
+                }
+            }
+                return this.Hours.CompareTo(other.Hours);
+            
+            
            // if (this.Equals(other)) return 0;
-            if ((this.Hours < other.Hours)||((this.Hours==other.Hours)&&(this.Minutes<other.Minutes)&&(this.Seconds<other.Seconds))
+          /*  if ((this.Hours < other.Hours)||((this.Hours==other.Hours)&&(this.Minutes<other.Minutes)&&(this.Seconds<other.Seconds))
                 ||(this.Hours==other.Hours)&& (this.Minutes == other.Minutes) && (this.Seconds < other.Seconds))
                 return -1;
             else if ((this.Hours > other.Hours) || ((this.Hours == other.Hours) && (this.Minutes > other.Minutes))
                 || (this.Hours == other.Hours) && (this.Minutes == other.Minutes) && (this.Seconds > other.Seconds))
                 return 1;
             return 0;
-           
+           */
             
         }
         public override int GetHashCode() => (Hours, Minutes, Seconds).GetHashCode();
@@ -113,35 +127,23 @@ namespace TimePeriodTime
             //if ((p1.Hours >= p2.Hours)||((p1.Hours == p2.Hours) && (p1.Minutes >= p2.Minutes))||
             //    ((p1.Hours==p2.Hours)&&(p1.Minutes==p2.Minutes)&&(p1.Seconds>=p2.Seconds)))
             //{
-            if (p1.CompareTo(p2) == 1)
-                return true;
-            return false;
-        
+            return p1.CompareTo(p2) > 0;
+
         }
         public static bool operator <(Time p1, Time p2)
         {
-            if (p1.CompareTo(p2) < 0)
-            {
-                return true;
-            }
-            return false;
+            return p1.CompareTo(p2) < 0;
         }
         public static bool operator >=(Time p1, Time p2)
         {
 
-            if (p1.CompareTo(p2) > 0  || p1.Equals(p2))
-                return true;
-            return false;
+            return p1.CompareTo(p2) >= 0;
 
         }
         public static bool operator <=(Time p1, Time p2)
         {
-            if (p1.CompareTo(p2) < 0 || p1.Equals(p2))
-            {
-                return true;
-            }
+            return p1.CompareTo(p2) <= 0;
            
-                return false;
             
         }
         public static Time operator +(Time p1, TimePeriod p2)
@@ -149,11 +151,25 @@ namespace TimePeriodTime
             var c3 = p1.Seconds + p2.Seconds;
             var b3 = p1.Minutes + p2.Minutes;
             var a3 = p1.Hours + p2.Hours;
-            if (a3 > 24)
+           
+             if (c3 > 59)
             {
-                a3 %= 24;
+
+                byte ile = (byte)(c3 / 60);
+                byte noweSek = (byte)(c3 % 60);
+                c3 = noweSek;
+                b3 += ile;
             }
-            Time t = new Time((byte)a3,(byte)b3,(byte)c3);
+            if (b3 > 59)
+            {
+                byte ile = (byte)(b3 / 60);
+                byte nowemMin = (byte)(b3 % 60);
+                b3 = nowemMin;
+                a3 += ile;
+            }
+            a3 %= 24;
+
+            Time t = new Time((byte)a3, (byte)b3, (byte)c3);
             return t;
 
 
@@ -176,9 +192,58 @@ namespace TimePeriodTime
         }
         public static Time Minus(Time t, TimePeriod t2)
         {
+            byte tHours = t.Hours;
+            long t2Hours = t2.Hours;
+         
+          
+            
+            long Hours = tHours - t2Hours;
             long Seconds = t.Seconds - t2.Seconds;
             long Minutes = t.Minutes - t2.Minutes;
-            long Hours = t.Hours - t2.Hours;
+            Console.WriteLine( Minutes);
+            Console.WriteLine(Hours);
+            Console.WriteLine(Seconds);
+
+            if (Hours < 0)
+            {
+                Hours = 23; 
+                Hours-=(byte)(t2Hours-tHours-1);
+                Console.WriteLine(Hours);
+            }
+            if (Minutes < 0)
+            {
+                
+                Minutes = 60+Minutes;
+                Hours -= 1;
+                
+            }
+            if (Seconds < 0)
+            {
+                Seconds = 60 + Seconds;
+                Minutes -= 1;
+             
+            }
+            /*  if (t2Minutes > tMinutes)
+              {
+                  while (tMinutes < t2Minutes)
+                  {
+                      tMinutes = (byte)(60 + tMinutes);
+                      tHours = (byte)(tHours - 1);
+                      Console.WriteLine(tMinutes);
+                      Console.WriteLine(tHours);
+                  }
+              }
+               if (tHours < t2Hours)
+              {
+
+                  tHours = 23;          
+                  Hours =tHours-(byte)((t2.Hours - t.Hours));
+
+
+              }*/
+
+
+
 
             Time t3 = new Time((byte)Hours, (byte)Minutes, (byte)Seconds);
             return t3;
@@ -291,35 +356,22 @@ namespace TimePeriodTime
         public static bool operator >(TimePeriod p1, TimePeriod p2)
         {
 
-            if (p1.CompareTo(p2) == 1)
-                return true;
-            return false;
+            return p1.CompareTo(p2) > 0;
 
         }
         public static bool operator <(TimePeriod p1, TimePeriod p2)
         {
-            if (p1.CompareTo(p2) < 0)
-            {
-                return true;
-            }
-            return false;
+            return p1.CompareTo(p2) < 0;
         }
         public static bool operator >=(TimePeriod p1, TimePeriod p2)
         {
 
-            if (p1.CompareTo(p2) > 0 || p1.Equals(p2))
-                return true;
-            return false;
+            return p1.CompareTo(p2) >= 0;
 
         }
         public static bool operator <=(TimePeriod p1, TimePeriod p2)
         {
-            if (p1.CompareTo(p2) < 0 || p1.Equals(p2))
-            {
-                return true;
-            }
-
-            return false;
+            return p1.CompareTo(p2) <= 0;
 
         }
 
