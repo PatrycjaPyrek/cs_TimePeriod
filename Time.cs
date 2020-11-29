@@ -54,15 +54,9 @@ namespace TimePeriodTime
         {
             try
             {
-               /* string[] tabelka = tekst.Split(':');
-                byte a = Convert.ToByte(tabelka[0]);
-                byte b = Convert.ToByte(tabelka[1]);
-                byte c = Convert.ToByte(tabelka[2]);
-               */
                 Time p = new Time(tekst);
                 return p;
             }
-
             catch
             {
                 throw new FormatException();
@@ -78,11 +72,8 @@ namespace TimePeriodTime
         }
         public bool Equals(Time other)
         {
-
             return ((Hours == other.Hours && Minutes == other.Minutes
                 && Seconds == other.Seconds));
-
-
         }
         public static bool Equals(Time p1, Time p2)
         {
@@ -95,25 +86,14 @@ namespace TimePeriodTime
             {
                 if (this.Minutes == other.Minutes)
                 {
-                    if (this.Seconds == other.Seconds)
-                    {
-                        return 0;
-                    }
+                    return this.Seconds.CompareTo(other.Seconds);
+                }
+                else
+                {
+                    this.Minutes.CompareTo(other.Minutes);
                 }
             }
                 return this.Hours.CompareTo(other.Hours);
-            
-            
-           // if (this.Equals(other)) return 0;
-          /*  if ((this.Hours < other.Hours)||((this.Hours==other.Hours)&&(this.Minutes<other.Minutes)&&(this.Seconds<other.Seconds))
-                ||(this.Hours==other.Hours)&& (this.Minutes == other.Minutes) && (this.Seconds < other.Seconds))
-                return -1;
-            else if ((this.Hours > other.Hours) || ((this.Hours == other.Hours) && (this.Minutes > other.Minutes))
-                || (this.Hours == other.Hours) && (this.Minutes == other.Minutes) && (this.Seconds > other.Seconds))
-                return 1;
-            return 0;
-           */
-            
         }
         public override int GetHashCode() => (Hours, Minutes, Seconds).GetHashCode();
 
@@ -121,74 +101,94 @@ namespace TimePeriodTime
 
         public static bool operator !=(Time p1, Time p2) => !(p1 == p2);
 
-        public static bool operator >(Time p1, Time p2)
-        {
-
-            //if ((p1.Hours >= p2.Hours)||((p1.Hours == p2.Hours) && (p1.Minutes >= p2.Minutes))||
-            //    ((p1.Hours==p2.Hours)&&(p1.Minutes==p2.Minutes)&&(p1.Seconds>=p2.Seconds)))
-            //{
-            return p1.CompareTo(p2) > 0;
-
-        }
-        public static bool operator <(Time p1, Time p2)
-        {
-            return p1.CompareTo(p2) < 0;
-        }
-        public static bool operator >=(Time p1, Time p2)
-        {
-
-            return p1.CompareTo(p2) >= 0;
-
-        }
-        public static bool operator <=(Time p1, Time p2)
-        {
-            return p1.CompareTo(p2) <= 0;
-           
-            
-        }
+        public static bool operator >(Time p1, Time p2)=> p1.CompareTo(p2) > 0;
+      
+        public static bool operator <(Time p1, Time p2)=> p1.CompareTo(p2) < 0;
+      
+     
+        public static bool operator >=(Time p1, Time p2)=> p1.CompareTo(p2) >= 0;
+      
+        public static bool operator <=(Time p1, Time p2)=>  p1.CompareTo(p2) <= 0;
+      
         public static Time operator +(Time p1, TimePeriod p2)
         {
-            var c3 = p1.Seconds + p2.Seconds;
-            var b3 = p1.Minutes + p2.Minutes;
-            var a3 = p1.Hours + p2.Hours;
-           
-             if (c3 > 59)
-            {
-
-                byte ile = (byte)(c3 / 60);
-                byte noweSek = (byte)(c3 % 60);
-                c3 = noweSek;
-                b3 += ile;
-            }
-            if (b3 > 59)
-            {
-                byte ile = (byte)(b3 / 60);
-                byte nowemMin = (byte)(b3 % 60);
-                b3 = nowemMin;
-                a3 += ile;
-            }
-            a3 %= 24;
-
-            Time t = new Time((byte)a3, (byte)b3, (byte)c3);
-            return t;
-
-
-
+           return Time.Plus(p1, p2);
         }
 
-        public static TimePeriod operator -(Time p1, Time p2)
+        public static Time Plus(Time p1, TimePeriod p2)
         {
-            var c3 = p1.Seconds - p2.Seconds;
-            var b3 = p1.Minutes - p2.Minutes;
-            var a3 = p1.Hours - p2.Hours;
-            Console.WriteLine(a3);
-            Console.WriteLine(b3);
-            Console.WriteLine(c3);
-            TimePeriod t = new TimePeriod(a3, b3, c3);
+            var seconds = p1.Seconds + p2.Seconds;
+            var minutes = p1.Minutes + p2.Minutes;
+            var hours = p1.Hours + p2.Hours;
+
+            if (seconds > 59)
+            {
+
+                byte ile = (byte)(seconds / 60);
+                byte noweSek = (byte)(seconds % 60);
+                seconds = noweSek;
+                minutes += ile;
+            }
+            if (minutes > 59)
+            {
+                byte ile = (byte)(minutes / 60);
+                byte nowemMin = (byte)(minutes % 60);
+                minutes = nowemMin;
+                hours += ile;
+            }
+            hours %= 24;
+
+            Time t = new Time((byte)hours, (byte)minutes, (byte)seconds);
             return t;
+        }
+
+        public static TimePeriod operator -(Time t, Time t2)
+        {
+            /*var seconds = p1.Seconds - p2.Seconds;
+            var minutes = p1.Minutes - p2.Minutes;
+            var hours = p1.Hours - p2.Hours;
+       
+            TimePeriod t = new TimePeriod(hours, minutes, seconds);
+            return t;*/
+            
+            long tHours = t.Hours;
+            long t2Hours = t2.Hours;
+           
 
 
 
+            long Hours = tHours - t2Hours;
+            long Seconds = t.Seconds - t2.Seconds;
+            long Minutes = t.Minutes - t2.Minutes;
+       
+
+            if (Hours < 0)
+            {
+                Hours = 23;
+                Hours -= (t2Hours - tHours - 1);
+                Console.WriteLine(Hours);
+            }
+            if (Minutes < 0)
+            {
+
+                Minutes = 60 + Minutes;
+                Hours -= 1;
+
+            }
+            if (Seconds < 0)
+            {
+                Seconds = 60 + Seconds;
+                Minutes -= 1;
+
+            }
+
+
+            TimePeriod t3 = new TimePeriod(Hours, Minutes, Seconds);
+            return t3;
+        }
+        public static TimePeriod Minus(Time t, Time t2)
+        {
+            return (t - t2);
         }
         public static Time Minus(Time t, TimePeriod t2)
         {
@@ -223,32 +223,15 @@ namespace TimePeriodTime
                 Minutes -= 1;
              
             }
-            /*  if (t2Minutes > tMinutes)
-              {
-                  while (tMinutes < t2Minutes)
-                  {
-                      tMinutes = (byte)(60 + tMinutes);
-                      tHours = (byte)(tHours - 1);
-                      Console.WriteLine(tMinutes);
-                      Console.WriteLine(tHours);
-                  }
-              }
-               if (tHours < t2Hours)
-              {
-
-                  tHours = 23;          
-                  Hours =tHours-(byte)((t2.Hours - t.Hours));
-
-
-              }*/
-
-
-
+           
 
             Time t3 = new Time((byte)Hours, (byte)Minutes, (byte)Seconds);
             return t3;
         }
-
+        public static Time operator -(Time t, TimePeriod t2)
+        {
+            return Time.Minus(t, t2);
+        }
     }
     public struct TimePeriod :IEquatable<TimePeriod>,IComparable<TimePeriod>
     {
@@ -260,12 +243,20 @@ namespace TimePeriodTime
         public long Hours => hour;
         public long Minutes => minute;
         public long Seconds => second;
-        public TimePeriod(long hour, long minute, long second)
+        public TimePeriod(long hour=0, long minute=0, long second=0)
         {
-            /*if (hour < 0 || minute < 0 || second < 0)
+            if (hour < 0)
             {
-                throw new ArgumentOutOfRangeException();
-            }*/
+                hour = 0;
+            }
+            if (minute < 0)
+            {
+                minute = 0;
+            }
+            if (second < 0)
+            {
+                second = 0;
+            }
             if (second > 59)
             {
                 
@@ -277,11 +268,13 @@ namespace TimePeriodTime
             if (minute > 59)
             {
                 long ile = minute / 60;
-                long nowemMin = minute % 60;
-                minute = nowemMin;
+                long noweMin = minute % 60;
+                minute = noweMin;
                 hour += ile;
             }
-
+            Console.WriteLine(hour);
+            Console.WriteLine(minute);
+            Console.WriteLine(second);
             this.hour = hour;
             this.minute = minute;
             this.second = second;
@@ -291,8 +284,9 @@ namespace TimePeriodTime
         }
         public TimePeriod(string tekst)
         {
+            Console.WriteLine(tekst);
             string[] tabelka = tekst.Split(':');
-
+                        
             byte a = Convert.ToByte(tabelka[0]);
             byte b = Convert.ToByte(tabelka[1]);
             byte c = Convert.ToByte(tabelka[2]);
@@ -309,15 +303,32 @@ namespace TimePeriodTime
             {
                 c = 0;
             }
-            this.hour = a*3600;
-            this.minute = b*60;
+            this.hour = a;
+            this.minute = b;
             this.second = c;
+
+            hour = a*3600;
+            minute = b*60;
+            second = c;
             this.dlugoscOdcinka = hour + minute + second;
+          
+        }
+        public TimePeriod(Time t1, Time t2)
+        {
+            var t = (t1-t2);
+            Console.WriteLine(t.Seconds);
+            Console.WriteLine(t.Minutes);
+            Console.WriteLine(t.Hours);
+            this.hour = t.Hours;
+            this.minute = t.Minutes;
+            this.second = t.Seconds;
+            this.dlugoscOdcinka = (hour * 3600) + (minute * 60) + second;
+
         }
 
         public override string ToString()
         {
-            return $"{hour:0}:{minute:00}:{second:00} => {dlugoscOdcinka}";
+            return $"{hour:0}:{minute:00}:{second:00}";
         }
 
         public override bool Equals(object obj)
@@ -338,14 +349,11 @@ namespace TimePeriodTime
         }
         public int CompareTo(TimePeriod other)
         {
-           // if (this.Equals(other)) return 0;
             if(this.DlugoscOdcinka>other.DlugoscOdcinka)
                 return 1;
             else if (this.DlugoscOdcinka < other.DlugoscOdcinka)
                 return -1;
             return 0;
-
-
         }
         public override int GetHashCode() => DlugoscOdcinka.GetHashCode();
 
@@ -353,27 +361,14 @@ namespace TimePeriodTime
 
         public static bool operator !=(TimePeriod p1, TimePeriod p2) => !(p1 == p2);
 
-        public static bool operator >(TimePeriod p1, TimePeriod p2)
-        {
-
-            return p1.CompareTo(p2) > 0;
-
-        }
-        public static bool operator <(TimePeriod p1, TimePeriod p2)
-        {
-            return p1.CompareTo(p2) < 0;
-        }
-        public static bool operator >=(TimePeriod p1, TimePeriod p2)
-        {
-
-            return p1.CompareTo(p2) >= 0;
-
-        }
-        public static bool operator <=(TimePeriod p1, TimePeriod p2)
-        {
-            return p1.CompareTo(p2) <= 0;
-
-        }
+        public static bool operator >(TimePeriod p1, TimePeriod p2)=> p1.CompareTo(p2) > 0;
+     
+        public static bool operator <(TimePeriod p1, TimePeriod p2)=> p1.CompareTo(p2) < 0;
+      
+        public static bool operator >=(TimePeriod p1, TimePeriod p2)=> p1.CompareTo(p2) >= 0;
+        
+        public static bool operator <=(TimePeriod p1, TimePeriod p2)=> p1.CompareTo(p2) <= 0;
+       
 
         public static TimePeriod Plus(TimePeriod t,TimePeriod t2)
         {
@@ -393,20 +388,16 @@ namespace TimePeriodTime
             TimePeriod t3 = new TimePeriod(Hours, Minutes, Seconds);
             return t3;
         }
-        public static TimePeriod Minus(Time t, Time t2)
+       /* public static TimePeriod Minus(Time t, Time t2)
         {
             
             long Seconds = t.Seconds - t2.Seconds;
             long Minutes = t.Minutes - t2.Minutes;
             long Hours = t.Hours - t2.Hours;
 
+
             TimePeriod t3 = new TimePeriod(Hours, Minutes, Seconds);
             return t3;
-        }
-   
-
-
+        }*/
     }
-
-
 }
